@@ -1,5 +1,5 @@
 <script lang="ts">
-  import LoginPage from "./auth/pages/LoginPage.svelte"
+  import AppRouter from "./router/AppRouter.svelte"
   </script>
 
-<LoginPage />
+<AppRouter />

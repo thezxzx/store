@@ -1,17 +1,23 @@
 <script lang="ts">
   import { validator } from "@felte/validator-zod"
   import { createForm } from "felte"
+  import { Link, navigate } from 'svelte-routing-next'
   import { auth } from "../../firebase/firebase"
   import { signInEmailAndPassword } from "../../firebase/firebaseAuth"
+  import { showErrorAlert } from "../../shared/utils/showAlerts"
   import { user } from "../../stores/userStore"
   import { loginForm, loginSchema as schema } from "../interfaces"
-
   
   const { form, errors, isValid } = createForm({
     async onSubmit(values: loginForm) {
       await signInEmailAndPassword(auth, values.email, values.password);
-      console.log({$user});
-      
+
+      console.log($user)
+      if ($user.emailVerified) {        
+        navigate('/', {
+          replace: true
+        })
+      } else showErrorAlert('Necesita verificar el correo');
     },
     extend: validator({ schema }),
   })
@@ -54,7 +60,7 @@
             {/if}
           </div>
           <label for="" class="label">
-            <a href="#" class="label-text-alt link link-hover">Clic aquí para crear una cuenta</a>
+            <Link to="/register" class="label-text-alt link link-hover">Clic aquí para crear una cuenta</Link>
           </label>
           <div class="form-control mt-6">
             <button class="btn btn-primary" type="submit" disabled={!$isValid}>Iniciar sesión</button>

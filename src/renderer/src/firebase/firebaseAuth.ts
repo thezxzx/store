@@ -63,6 +63,6 @@ export const signInEmailAndPassword = async (auth: Auth, loginEmail: string, pas
     })
   } catch (error) {
     handleErrors(error)
-    console.error(error)
+    // console.error(error)
   }
 }

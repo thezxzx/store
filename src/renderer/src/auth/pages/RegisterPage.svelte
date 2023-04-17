@@ -1,10 +1,10 @@
 <script lang="ts">
   import { validator } from '@felte/validator-zod'
   import { createForm } from 'felte'
+  import { Link } from 'svelte-routing-next'
   import { auth } from '../../firebase/firebase'
   import { createUserEmailPassword } from '../../firebase/firebaseAuth'
   import { registerForm, schema } from '../interfaces'
-
   const { form, errors, isValid } = createForm({
     async onSubmit(values: registerForm) {
       await createUserEmailPassword(auth, values.email, values.password);
@@ -60,7 +60,7 @@
               {/each}
             {/if}
             <label for="" class="label">
-              <a href="#" class="label-text-alt link link-hover">¿Ya tienes una cuenta, clic aquí para iniciar sesión?</a>
+              <Link to="/login" class="label-text-alt link link-hover">¿Ya tienes una cuenta, clic aquí para iniciar sesión?</Link>
             </label>
           </div>
           <div class="form-control mt-6">
