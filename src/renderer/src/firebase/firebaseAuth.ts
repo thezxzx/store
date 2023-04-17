@@ -64,6 +64,9 @@ export const signInEmailAndPassword = async (auth: Auth, loginEmail: string, pas
       loginTime: new Date()
     })
   } catch (error) {
+    // Mostrar mensjaes de error por consola para anotarlos en la función
+    console.log({ error })
+    console.log(error.code)
     handleErrors(error)
     // console.error(error)
   }

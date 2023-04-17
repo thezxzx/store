@@ -4,20 +4,29 @@
   import { Link, navigate } from 'svelte-routing-next'
   import { auth } from "../../firebase/firebase"
   import { signInEmailAndPassword } from "../../firebase/firebaseAuth"
+  import { handleErrors } from "../../shared/utils/errors"
   import { showErrorAlert } from "../../shared/utils/showAlerts"
   import { user } from "../../stores/userStore"
   import { loginForm, loginSchema as schema } from "../interfaces"
   
   const { form, errors, isValid } = createForm({
     async onSubmit(values: loginForm) {
-      await signInEmailAndPassword(auth, values.email, values.password);
+      try {
+        await signInEmailAndPassword(auth, values.email, values.password);
 
-      // console.log($user)
-      if ($user.emailVerified) {        
-        navigate('/', {
-          replace: true
-        })
-      } else showErrorAlert('Necesita verificar el correo');
+        // Si no existe el usuario y el correo no esta verificado muestra mensajes de error, de lo contrario redirige a la pantalla de inicio
+        if($user) {
+          if ($user.emailVerified) {        
+            navigate('/', {
+              replace: true
+            })
+          } else showErrorAlert('Necesita verificar el correo');
+
+        }
+      } catch (error) {
+        handleErrors(error);
+      }
+
     },
     extend: validator({ schema }),
   })

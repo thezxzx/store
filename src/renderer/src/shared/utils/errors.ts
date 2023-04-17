@@ -1,3 +1,4 @@
+import { user } from '../../stores/userStore'
 import { showErrorAlert } from './showAlerts'
 
 export const handleErrors = (error: any) => {
@@ -6,7 +7,7 @@ export const handleErrors = (error: any) => {
 
 // Errores de firebase
 const firebaseError = (error: any) => {
-  console.log(error)
+  user.set(null)
   const errorCodes = {
     'auth/email-already-in-use': 'Este correo ya está registrado',
     'auth/user-not-found': 'Usuario o contraseña no valido', // No hay un usuario registrado con ese correo
