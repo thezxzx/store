@@ -30,7 +30,7 @@ export const schema = zod
         message: 'La contraseña es obligatoria'
       })
       .min(6, {
-        message: 'Tiene que tener mínimo 6 caracteres'
+        message: 'La contraseña tiene que tener mínimo 6 caracteres'
       })
       .trim()
   })

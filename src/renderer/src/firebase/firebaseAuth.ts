@@ -4,10 +4,12 @@ import {
   UserCredential,
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  signInWithEmailAndPassword,
   signOut
 } from 'firebase/auth'
 import { handleErrors } from '../shared/utils/errors'
 import { showSuccessAlert } from '../shared/utils/showAlerts'
+import { user } from '../stores/userStore'
 
 // Crear usuario con correo y contraseña
 export const createUserEmailPassword = async (auth: Auth, email: string, password: string) => {
@@ -18,7 +20,7 @@ export const createUserEmailPassword = async (auth: Auth, email: string, passwor
       password
     )
     const user = userCredential.user
-    console.log({ user })
+    // console.log({ user })
     await sendEmailVerificationUser(user)
     showSuccessAlert('Verifica tu correo')
   } catch (error) {
@@ -41,6 +43,26 @@ export const signOutSession = async (auth: Auth) => {
   try {
     await signOut(auth)
   } catch (error) {
+    console.error(error)
+  }
+}
+
+export const signInEmailAndPassword = async (auth: Auth, loginEmail: string, password: string) => {
+  try {
+    const userCredential: UserCredential = await signInWithEmailAndPassword(
+      auth,
+      loginEmail,
+      password
+    )
+    const { email, emailVerified, uid } = userCredential.user
+    user.set({
+      email,
+      emailVerified,
+      uid,
+      loginTime: new Date()
+    })
+  } catch (error) {
+    handleErrors(error)
     console.error(error)
   }
 }

@@ -8,8 +8,6 @@
   const { form, errors, isValid } = createForm({
     async onSubmit(values: registerForm) {
       await createUserEmailPassword(auth, values.email, values.password);
-      console.log($isValid)
-      console.log(schema);
     },
     extend: validator({ schema }),
   })
@@ -25,7 +23,7 @@
           <h2 class="text-center font-bold text-3xl text-white">Registrarse</h2>
           <div class="form-control">
             <label for="email" class="label">
-              <span class="label-text">Email:</span>
+              <span class="label-text">Correo:</span>
             </label>
             <input name="email" type="text" placeholder="correoEjemplo@gmail.com" class="input input-bordered" id="email" />
             {#if $errors.email}
@@ -38,7 +36,7 @@
           </div>
           <div class="form-control">
             <label for="password" class="label">
-              <span class="label-text">Password:</span>
+              <span class="label-text">Contraseña:</span>
             </label>
             <input name="password" type="password" placeholder="Contraseña" class="input input-bordered" id="password" />
             {#if $errors.password}

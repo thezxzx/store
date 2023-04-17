@@ -1,5 +1,5 @@
 <script lang="ts">
-  import RegisterPage from "./auth/pages/RegisterPage.svelte"
-</script>
+  import LoginPage from "./auth/pages/LoginPage.svelte"
+  </script>
 
-<RegisterPage />
+<LoginPage />
