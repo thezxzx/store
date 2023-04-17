@@ -1,6 +1,8 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
+  import { afterUpdate, onMount } from 'svelte'
   import { navigate } from 'svelte-routing-next'
+  import { auth } from '../../firebase/firebase'
+  import { signOutSession } from '../../firebase/firebaseAuth'
   import { user } from "../../stores/userStore"
 
   onMount( () => {
@@ -9,10 +11,19 @@
     })
   })
 
+  const handleSignOut = async () => {
+    await signOutSession(auth);
+  }
+
+  afterUpdate(() => {
+    if( !$user || !$user.emailVerified ) navigate('/login', {
+      replace: true
+    })
+  })
 
 </script>
 
 
 <main>
-  <h1>HOME PAGE</h1>
+  <button class="btn" on:click={handleSignOut}>Cerrar sesión</button>
 </main>

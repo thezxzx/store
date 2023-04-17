@@ -12,7 +12,7 @@
     async onSubmit(values: loginForm) {
       await signInEmailAndPassword(auth, values.email, values.password);
 
-      console.log($user)
+      // console.log($user)
       if ($user.emailVerified) {        
         navigate('/', {
           replace: true

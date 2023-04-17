@@ -42,6 +42,8 @@ const sendEmailVerificationUser = async (user: User) => {
 export const signOutSession = async (auth: Auth) => {
   try {
     await signOut(auth)
+    // Eliminar usuario
+    user.set(null)
   } catch (error) {
     console.error(error)
   }
