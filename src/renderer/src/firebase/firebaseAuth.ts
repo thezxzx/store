@@ -6,6 +6,8 @@ import {
   sendEmailVerification,
   signOut
 } from 'firebase/auth'
+import { handleErrors } from '../shared/utils/errors'
+import { showSuccessAlert } from '../shared/utils/showAlerts'
 
 // Crear usuario con correo y contraseña
 export const createUserEmailPassword = async (auth: Auth, email: string, password: string) => {
@@ -18,8 +20,10 @@ export const createUserEmailPassword = async (auth: Auth, email: string, passwor
     const user = userCredential.user
     console.log({ user })
     await sendEmailVerificationUser(user)
+    showSuccessAlert('Verifica tu correo')
   } catch (error) {
-    console.error(error)
+    handleErrors(error)
+    // console.error(error)
   }
 }
 

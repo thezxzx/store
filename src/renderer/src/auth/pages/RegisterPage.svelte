@@ -1,36 +1,17 @@
 <script lang="ts">
+  import { validator } from '@felte/validator-zod'
   import { createForm } from 'felte'
   import { auth } from '../../firebase/firebase'
   import { createUserEmailPassword } from '../../firebase/firebaseAuth'
-  import { isSamePassword, validateEmail, validatePassword } from '../../shared/utils/validators'
-  import { IRegister } from '../interfaces'
+  import { registerForm, schema } from '../interfaces'
 
-  const { form, warnings, touched } = createForm({
-    async onSubmit(values: IRegister) {
-      console.log( values );
+  const { form, errors, isValid } = createForm({
+    async onSubmit(values: registerForm) {
       await createUserEmailPassword(auth, values.email, values.password);
+      console.log($isValid)
+      console.log(schema);
     },
-    warn(values) {
-      const warnings = {
-        email: '',
-        password: '',
-        confirmPassword: ''
-      }
-
-      if(values.email?.length === 0 || validateEmail(values.email)) {
-        warnings.email = validateEmail(values.email)
-      }
-
-      if(validatePassword(values.password, values.confirmPassword)) {
-        warnings.password = validatePassword(values.password, values.confirmPassword);
-      }
-      
-      if(isSamePassword(values.password, values.confirmPassword)) {
-        warnings.confirmPassword = isSamePassword(values.password, values.confirmPassword);
-      }
-            
-      return warnings;
-    }
+    extend: validator({ schema }),
   })
 </script>
 
@@ -47,33 +28,45 @@
               <span class="label-text">Email:</span>
             </label>
             <input name="email" type="text" placeholder="correoEjemplo@gmail.com" class="input input-bordered" id="email" />
-            <p class="text-center mt-3 text-red-500">
-              { ($warnings.email && $touched.email) ? $warnings.email : '' }
-            </p>
+            {#if $errors.email}
+              {#each $errors.email as error}
+                <li class="text-center mt-3 text-red-500">
+                  { error }
+                </li>
+              {/each}
+            {/if}
           </div>
           <div class="form-control">
             <label for="password" class="label">
               <span class="label-text">Password:</span>
             </label>
             <input name="password" type="password" placeholder="Contraseña" class="input input-bordered" id="password" />
-            <p class="text-center mt-3 text-red-500">
-              { ($warnings.password && $touched.password) ? $warnings.password : '' }
-            </p>
+            {#if $errors.password}
+              {#each $errors.password as error}
+                <li class="text-center mt-3 text-red-500">
+                  { error }
+                </li>
+              {/each}
+            {/if}
           </div>
           <div class="form-control">
             <label for="confirmPassword" class="label">
               <span class="label-text">Confirmar contraseña:</span>
             </label>
             <input name="confirmPassword" type="password" placeholder="Confirmar contraseña" class="input input-bordered" id="confirmPassword" />
-            <p class="text-center mt-3 text-red-500">
-              { ($warnings.confirmPassword && $touched.confirmPassword) ? $warnings.confirmPassword : '' }
-            </p>
+            {#if $errors.confirmPassword }
+              {#each $errors.confirmPassword as error}
+                <li class="text-center mt-3 text-red-500">
+                  { error }
+                </li>
+              {/each}
+            {/if}
             <label for="" class="label">
               <a href="#" class="label-text-alt link link-hover">¿Ya tienes una cuenta, clic aquí para iniciar sesión?</a>
             </label>
           </div>
           <div class="form-control mt-6">
-            <button class="btn btn-primary" type="submit">Registrarse</button>
+            <button class="btn btn-primary" type="submit" disabled={!$isValid}>Registrarse</button>
           </div>
         </div>
       </div>
